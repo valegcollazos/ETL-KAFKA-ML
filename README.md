@@ -172,7 +172,14 @@ python -c "import sqlite3; c = sqlite3.connect('data/predictions.db'); print(c.e
 
 **Conexión (broker del curso).** `SASL_SSL` con `SCRAM-SHA-512`, usuario `classroom-students`, tópico `etl.records`. La contraseña se lee desde `.env` y el `group.id` es el nombre completo en minúsculas separado por guiones. El certificado se toma de `certifi`.
 
-**Consumo.** `src/consume_raw.py` usa `confluent-kafka`, `auto.offset.reset=earliest` y termina cuando pasan 20 segundos sin mensajes nuevos. Cada mensaje se guarda en `data/raw/records.jsonl` junto con sus metadatos (partición, offset, timestamp, clave y cabeceras).
+**Consumo.** `src/consume_raw.py` usa `confluent-kafka` con `auto.offset.reset=earliest` y termina cuando pasan 20 segundos sin mensajes nuevos. Cada mensaje se decodifica, se valida (debe traer `metadata` y `data`) y se **acumula en memoria** en un diccionario indexado por `record_id`, que evita registros duplicados. Al finalizar, el estado se verifica, se persiste en `data/raw/records.jsonl` y solo entonces se confirman los offsets en Kafka.
+
+**Verificación del estado construido.**
+
+- 782 mensajes recibidos y 782 registros únicos en memoria (0 duplicados, 0 inválidos).
+- Comprobación de consistencia: recibidos = únicos + duplicados + inválidos.
+- El archivo en disco tiene tantas líneas como registros en el estado.
+- Distribución por año: 2015: 158 · 2016: 157 · 2017: 155 · 2018: 156 · 2019: 156.
 
 **Estructura de los mensajes** (revisada con `inspect_raw.py`):
 
