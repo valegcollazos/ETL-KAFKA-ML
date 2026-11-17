@@ -190,13 +190,6 @@ python -c "import sqlite3; c = sqlite3.connect('data/predictions.db'); print(c.e
 }
 ```
 
-El año viene explícito en `metadata.year`, y `data` conserva las columnas originales de cada CSV.
-
-**Verificación del estado construido.**
-
-- 782 mensajes consumidos y 782 `record_id` únicos (sin duplicados ni pérdidas).
-- Distribución por año: 2015: 158 · 2016: 157 · 2017: 155 · 2018: 156 · 2019: 156.
-
 ---
 
 ## 6. Preparación e integración de los datos
