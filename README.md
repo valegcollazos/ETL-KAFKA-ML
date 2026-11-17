@@ -2,7 +2,7 @@
 
 Pipeline ETL con **streaming de eventos (Kafka)**, **regresión con scikit-learn** y un **dashboard operativo en Streamlit** para predecir el *Happiness Score* de países a partir de los datos del [World Happiness Report](https://www.worldhappiness.report/data-sharing/) (2015-2019).
 
-ttps://github.com/user-attachments/assets/2b37e333-76aa-4072-9cc2-af86dc563c68
+https://github.com/user-attachments/assets/2b37e333-76aa-4072-9cc2-af86dc563c68
 
 *Dashboard actualizándose en tiempo real: el consumidor predice cada evento de Kafka, lo guarda en SQLite y Streamlit muestra métricas, gráficos y alertas.*
 
