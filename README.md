@@ -547,4 +547,6 @@ python src\producer.py --delay 0.3
 ## Referencias
 
 - World Happiness Report, *Data sharing*: https://www.worldhappiness.report/data-sharing/
+- World Happiness Report, *FAQ* (definición de las seis variables y de Dystopia): https://www.worldhappiness.report/faq/
+- World Happiness Report 2019, *Statistical Appendix 1* (definición de `social support` y detalles metodológicos): https://files.worldhappiness.report/WHR19_Statistical_Appendix_01.pdf
 - Paleta Okabe-Ito (Okabe & Ito, 2008), diseñada para ser legible con daltonismo.
