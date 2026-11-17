@@ -6,7 +6,6 @@ RAW = Path("data/raw/records.jsonl")
 OUT = Path("data/processed/happiness_clean.csv")
 OUT.parent.mkdir(parents=True, exist_ok=True)
 
-# Nombres de columnas distintos según el año -> nombre único
 RENAME = {
     "Country": "country", "Country or region": "country",
     "Happiness Score": "score", "Happiness.Score": "score", "Score": "score",
@@ -25,7 +24,6 @@ RENAME = {
 NUM = ["score", "gdp", "social_support", "life_expectancy",
        "freedom", "corruption", "generosity"]
 
-# Mismo país escrito distinto según el año
 COUNTRY_FIX = {
     "Somaliland region": "Somaliland Region",
     "Hong Kong S.A.R., China": "Hong Kong",
@@ -35,8 +33,7 @@ COUNTRY_FIX = {
     "Macedonia": "North Macedonia",
 }
 
-# 1. Cargar y renombrar (las columnas no mapeadas se descartan a propósito:
-#    rank, error estándar, intervalos, whiskers y dystopia residual)
+#Cargar y renombrar (las columnas no mapeadas se descartan a propósito)
 records = []
 with open(RAW, encoding="utf-8") as f:
     for line in f:
@@ -48,10 +45,10 @@ with open(RAW, encoding="utf-8") as f:
 df = pd.DataFrame(records)
 print("Forma inicial:", df.shape)
 
-# 2. Normalizar nombres de países
+#Normalizar nombres de países
 df["country"] = df["country"].str.strip().replace(COUNTRY_FIX)
 
-# 3. Tipos: lo que no sea número (p. ej. "N/A") se vuelve NaN
+
 for c in NUM:
     antes = df[c].isna().sum()
     df[c] = pd.to_numeric(df[c], errors="coerce")
@@ -59,7 +56,7 @@ for c in NUM:
     if nuevos:
         print(f"[tipos] {c}: {nuevos} valores no numéricos convertidos a NaN")
 
-# 4. Calidad
+#Calidad
 print("\nNulos por año:")
 print(df[NUM].isna().groupby(df["year"]).sum())
 
@@ -88,7 +85,6 @@ for y, g in df.groupby("year"):
           round(g["social_support"].std(), 3),
           round(g["social_support"].corr(g["score"]), 3))
 
-# 5. Limpieza mínima y guardado
 df = df.dropna(subset=["score"])
 df = df.drop_duplicates(["country", "year"], keep="last")
 df = df[["country", "year"] + NUM].sort_values(["year", "country"])
