@@ -2,11 +2,9 @@
 
 Pipeline ETL con **streaming de eventos (Kafka)**, **regresión con scikit-learn** y un **dashboard operativo en Streamlit** para predecir el *Happiness Score* de países a partir de los datos del [World Happiness Report](https://www.worldhappiness.report/data-sharing/) (2015-2019).
 
-> **Workshop 3** · Curso ETL (G01) · Ingeniería de Datos e Inteligencia Artificial · Universidad Autónoma de Occidente
-> Autora: Valeria Gómez Collazos
+ttps://github.com/user-attachments/assets/2b37e333-76aa-4072-9cc2-af86dc563c68
 
-<!-- Cuando tengas una captura del dashboard, guárdala como docs/dashboard.png y descomenta la siguiente línea -->
-<!-- ![Dashboard en tiempo real](docs/dashboard.png) -->
+*Dashboard actualizándose en tiempo real: el consumidor predice cada evento de Kafka, lo guarda en SQLite y Streamlit muestra métricas, gráficos y alertas.*
 
 ---
 
@@ -26,7 +24,6 @@ Pipeline ETL con **streaming de eventos (Kafka)**, **regresión con scikit-learn
 12. [Limitaciones](#12-limitaciones)
 13. [Posibles mejoras](#13-posibles-mejoras)
 14. [Solución de problemas](#14-solución-de-problemas)
-15. [Cobertura de los criterios del taller](#15-cobertura-de-los-criterios-del-taller)
 
 ---
 
@@ -223,7 +220,7 @@ Los cinco CSV **no comparten esquema**: la única columna que se llama igual en 
 
 ### Integración de los años
 
-Se **apilaron los cinco años en formato largo** (una fila por país-año, con la columna `year`). Resultado: `data/processed/happiness_clean.csv`, de 782 filas × 9 columnas.
+Se apilaron los cinco años en formato largo (una fila por país-año, con la columna `year`). Resultado: `data/processed/happiness_clean.csv`, de 782 filas × 9 columnas.
 
 - *Justificación:* es la forma más simple de conservar toda la información y permite que `year` actúe como variable.
 - *Limitación:* un mismo país aparece varias veces, lo que afecta cómo debe interpretarse el split train/test (ver [sección 8](#robustez)).
@@ -544,23 +541,6 @@ docker exec -it kafka-local /opt/kafka/bin/kafka-topics.sh --bootstrap-server lo
 python src\inference_consumer.py --group-id happiness-inference-v2
 python src\producer.py --delay 0.3
 ```
-
----
-
-## 15. Cobertura de los criterios del taller
-
-| Criterio | Dónde se cubre |
-|---|---|
-| **Consumo de Kafka** (conexión, consumidor, recuperación y manejo del consumo) | `src/consume_raw.py`, sección 5 |
-| **Construcción del estado** (acumulación y verificación) | `data/raw/records.jsonl` y `prepare.py`; verificación de 782 registros únicos, sección 5 |
-| **EDA / análisis** (diferencias, inconsistencias y calidad entre años) | `src/eda.py`, `src/consistency_check.py`, secciones 6 y 7 |
-| **Preparación de variables** | `src/prepare.py` y `Pipeline` de `src/train.py`, secciones 6 y 8 |
-| **Entrenamiento del modelo** | `src/train.py`, sección 8 |
-| **Evaluación y visualización** (MAE, MSE, RMSE, R², gráficos) | `reports/figures/06` a `08`, sección 8 |
-| **Documentación técnica** | Este README |
-| Esquema del taller: consumidor → predicción → carga en base de datos | Sección 9 |
-
----
 
 ## Referencias
 
