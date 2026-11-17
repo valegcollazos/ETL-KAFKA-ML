@@ -209,12 +209,14 @@ Los cinco CSV **no comparten esquema**: la única columna que se llama igual en 
 | `corruption` | Trust (Government Corruption) | Trust..Government.Corruption. | Perceptions of corruption |
 | `generosity` | Generosity | Generosity | Generosity |
 
+Las variables del dataset son *contribuciones* al score (coeficiente × distancia a Dystopia, el país imaginario con los valores más bajos observados), no mediciones crudas. Por eso el mínimo de cada variable es 0.
+
 **Columnas descartadas y por qué**
 
 | Columna | Motivo |
 |---|---|
 | `Happiness Rank`, `Overall rank` | Es el propio score expresado como posición (fuga de información). |
-| `Dystopia Residual` | El score es la suma de sus componentes más este residuo; usarlo permitiría predecir el objetivo casi sin error. Tampoco existe en 2018-2019. |
+| `Dystopia Residual` | El score es la suma de las seis contribuciones, el valor de Dystopia (constante) y el residuo de cada país; usarlo permitiría predecir el objetivo casi sin error. Tampoco existe en 2018-2019. |
 | `Standard Error`, `Whisker.high/low`, `Lower/Upper Confidence Interval` | Se derivan del score y solo existen en algunos años. |
 | `Region` | Solo existe en 2015-2016. |
 
@@ -483,9 +485,9 @@ Un reporte de **una sola página**, de arriba hacia abajo:
 
 ## 12. Limitaciones
 
-1. **Cambios de escala entre ediciones (hipótesis sin verificar).** Se asume una causa metodológica a partir de los datos; no se contrastó con la documentación oficial de cada edición.
-2. **Equivalencia `Family` ≈ `Social support`.** Se tratan como la misma variable (nombre distinto según el año). Los datos respaldan que mantienen una relación similar con el score (correlación 0.74-0.78 en todos los años), pero su **nivel** cambia (media 0.79 en 2016 contra 1.19 en 2017).
-3. **Ceros como valores válidos.** Se interpretan como valores legítimos (los mínimos de cada variable), no como faltantes; conviene confirmarlo en la documentación.
+1. **Cambios de escala entre ediciones.** Se observan desplazamientos sistemáticos en varias variables. Una posible causa es que las contribuciones se recalculan en cada edición con un modelo que ha evolucionado (según el FAQ) y revisiones de datos como el reescalado del PIB (apéndice 2019). No se verificó que esto explique los saltos concretos de 2016-2019.
+2. **Equivalencia `Family` ≈ `Social support`.** Se define social support como el promedio nacional de respuestas sí/no a si la persona tiene a alguien con quien contar en un problema. No se encontró una nota oficial que confirme que Family (2015-2017) sea la misma pregunta; se asume por el nombre y porque su relación con el score es similar (correlación 0.74-0.78), aunque su nivel cambia.
+3. **Ceros como valores válidos.** Son consistentes con la definición: un país con el valor más bajo observado en una variable tiene contribución 0.
 4. **Un mismo país aparece en varios años.** El split aleatorio es optimista; el RMSE esperado para países nuevos ronda 0.56.
 5. **Años no vistos.** El modelo no puede aprender el desplazamiento de un año ausente del entrenamiento (el codificador de `year` lo ignora); afecta a la prueba temporal (R² 0.75) y a cualquier predicción futura.
 6. **Imputación por mediana global.** Para Emiratos Árabes Unidos 2018 la mediana (~0.09) queda lejos de los valores del país en otros años (0.18-0.39).
